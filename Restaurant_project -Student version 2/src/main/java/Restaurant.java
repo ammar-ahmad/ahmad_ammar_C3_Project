@@ -3,6 +3,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Restaurant {
     private TimeUtil timeUtil;
@@ -18,6 +20,21 @@ public class Restaurant {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.timeUtil = new TimeUtil();
+    }
+
+    public long calculateSelectionAmount(List<String> items){
+        if(items == null || items.size()==0){
+            return 0;
+        }
+        long sum =0;
+        final Map<String, Integer> itemPriceMap = menu.stream().collect(Collectors.toMap(Item::getName,
+                Item::getPrice));
+        for(String item: items){
+            if(itemPriceMap.containsKey(item)){
+                sum = sum+ itemPriceMap.get(item);
+            }
+        }
+        return sum;
     }
 
     public boolean isRestaurantOpen() {
