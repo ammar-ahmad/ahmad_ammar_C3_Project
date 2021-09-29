@@ -5,6 +5,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,4 +87,47 @@ class RestaurantTest {
                 ()->restaurant.removeFromMenu("French fries"));
     }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    @Test
+    public void calculate_order_total_for_items_returns_valid_amount(){
+        createRestaurant();
+
+        List<String> items = new ArrayList<>();
+        items.add(SWEET_CORN_SOUP);
+        items.add(VEGETABLE_LASAGNE);
+
+        assertEquals(388,restaurant.calculateSelectionAmount(items));
+    }
+
+    @Test
+    public void calculate_order_total_for_zero_items_in_list(){
+        createRestaurant();
+
+        assertEquals(0,restaurant.calculateSelectionAmount(new ArrayList<>()));
+    }
+
+    @Test
+    public void calculate_order_total_for_null_input(){
+        createRestaurant();
+
+        assertEquals(0,restaurant.calculateSelectionAmount(null));
+    }
+
+    @Test
+    public void calculate_order_total_for_invalid_item_to_return_0(){
+        createRestaurant();
+
+        final ArrayList<String> items = new ArrayList<>();
+        items.add("Dummy item not on list");
+        assertEquals(0,restaurant.calculateSelectionAmount(items));
+    }
+    @Test
+    public void calculate_order_total_for_mixture_of_valid_and_invalid_item_to_return_non_0(){
+        createRestaurant();
+
+        final ArrayList<String> items = new ArrayList<>();
+        items.add("Dummy item not on list");
+        items.add(VEGETABLE_LASAGNE);
+        restaurant.displayDetails();
+        assertEquals(269,restaurant.calculateSelectionAmount(items));
+    }
 }
